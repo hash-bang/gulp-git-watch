@@ -11,6 +11,8 @@ function GulpGitWatch(options) {
 		initialPoll: 1 * 1000,
 		head: null, // Current head position (if omitted it will be retrieved)
 		forceHead: false, // Whether to force re-retrival of the head in each check
+		gitHead: ['git', 'rev-list', 'HEAD', '-n', '1'], // Command to retrieve the current git HEAD
+		gitPull: ['git', 'pull'], // Command to pull changes
 	};
 	if (options) // Read in options (if any)
 		for (var k in options)
@@ -25,21 +27,23 @@ function GulpGitWatch(options) {
 				if (settings.head && !settings.forceHead) return next(); // Skip head retrieval stage
 					async()
 						.use(asyncExec)
-						.exec('head', ['git', 'rev-list', 'HEAD', '-n', '1'])
+						.exec('head', settings.gitHead)
 						.end(function(err) {
 							if (err) return next(err);
-							settings.head = this.head;
+							settings.head = this.head[0];
 							next();
 						});
 			})
-			.exec(['git', 'pull'])
-			.exec('newHead', ['git', 'rev-list', 'HEAD', '-n', '1'])
+			.exec(settings.gitPull)
+			.exec('newHead', settings.gitHead)
 			.end(function(err) {
 				if (err) {
 					throw new Error(err);
 				} else {
-					if (this.newHead != settings.head) {
-						self.emit('change', this.newHead, settings.head);
+					var newHead = this.newHead[0];
+					if (newHead != settings.head) {
+						self.emit('change', newHead, settings.head);
+						settings.head = newHead;
 					} else {
 						self.emit('nochange', settings.head);
 					}
