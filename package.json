@@ -1,0 +1,27 @@
+{
+  "name": "gulp-git-watch",
+  "version": "0.1.0",
+  "description": "Gulp utility to constantly check Git for updates and trigger events when detected",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hash-bang/gulp-git-watch"
+  },
+  "keywords": [
+    "gulp",
+    "git",
+    "watch",
+    "restart",
+    "monitor"
+  ],
+  "author": "Matt Carter <m@ttcarter.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hash-bang/gulp-git-watch/issues"
+  },
+  "homepage": "https://github.com/hash-bang/gulp-git-watch",
+  "dependencies": {
+    "async-chainable": "~1.7.1",
+    "async-chainable-exec": "~1.1.0"
+  }
+}
